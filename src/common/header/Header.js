@@ -11,13 +11,19 @@ import "./header.css"
 
 
 const Header = (props) => {
+    /**
+     * set state variables
+     */
     const [isOpen, setIsOpen] = useState(false);
     const [buttonValue, setButtonValue] = useState("LOGIN");
-    const [redirectToBookShow, setRedirectToBookShow] = useState(false)
 
+    /**
+     * set function is used to open close modal popup for login/register
+     */
     function toggleModal() {
         setIsOpen(!isOpen);
     }
+
     useEffect(() => {
         const userDetails = sessionStorage.getItem("user-details");
         if (userDetails && JSON.parse(userDetails).id) {
@@ -25,12 +31,13 @@ const Header = (props) => {
         }
     }, [buttonValue])
 
+    /**
+     * clear session data if user clicks on logout and redirect to home
+     */
     const handleLogout = () => {
-
         sessionStorage.removeItem('access-token');
         sessionStorage.removeItem('user-details');
         setButtonValue("LOGIN");
-
     }
 
 
@@ -39,7 +46,7 @@ const Header = (props) => {
         <Fragment>
             <div className="header">
                 <img className="logo" src={logo} alt="My logo" />
-                {buttonValue == "LOGIN" ?
+                {buttonValue === "LOGIN" ?
                     <Button className="login-btn" variant="contained" name="login" onClick={toggleModal}>{buttonValue}</Button>
                     : <Link to="/"><Button className="login-btn" variant="contained" name="login" onClick={handleLogout}>{buttonValue}</Button></Link>
                 }

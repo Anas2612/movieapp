@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import Button from '@material-ui/core/Button';
-
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
-
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
@@ -13,6 +11,9 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import "./loginRegister.css"
 
 const LoginRegister = (props) => {
+    /**
+     * set state variables
+     */
     const [value, setValue] = React.useState(0);
     const [clicked, setClicked] = useState(false);
     const [username, setUsername] = useState("");
@@ -26,11 +27,18 @@ const LoginRegister = (props) => {
     const [responseTextRegister, setResponseTextRegister] = useState("");
     const [responseTextRegisterStyle, setResponseTextRegisterStyle] = useState("");
 
+    /**
+     * this function is used to change the view tab 
+     * login-0/register-1
+     */
     const handleChange = (event, newValue) => {
         setClicked(false);
         setValue(newValue);
     };
 
+    /**
+     * this function is used to make an api call for logging in user
+     */
     const handleLoginUser = async () => {
         setClicked(true);
         if (!username || !password) {
@@ -60,18 +68,18 @@ const LoginRegister = (props) => {
 
 
         } catch (err) {
-
             alert("Something Went Wrong \n" + err);
         }
 
     }
-
+    /**
+     * this function is used to make an api call for regertering an user
+     */
     const handleRegister = () => {
         setClicked(true);
         if (!email || !firstname || !lastname || !contactNo || !password) {
             return;
         }
-
 
         fetch(props.baseUrl + "signup", {
             method: "POST",
@@ -89,16 +97,18 @@ const LoginRegister = (props) => {
         }).then((response) => response.json())
             .then((response) => {
                 if (response.status === "ACTIVE") {
-                    setResponseText("Registration Successfull. Please Login!")
-                    setResponseStyle("success");
+                    setResponseTextRegister("Registration Successfull. Please Login!")
+                    setResponseTextRegisterStyle("success");
                 } else {
-                    setResponseText(response.message);
-                    setResponseStyle("red");
+                    setResponseTextRegister(response.message);
+                    setResponseTextRegisterStyle("red");
                 }
             })
 
     }
-
+    /**
+     * set initial props for tab switching - login/register
+     */
     function a11yProps(index) {
         return {
             id: `simple-tab-${index}`,

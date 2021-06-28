@@ -1,4 +1,3 @@
-import 'date-fns';
 import React, { useEffect, useState } from "react";
 import Header from "../../common/header/Header";
 import GridList from '@material-ui/core/GridList';
@@ -23,15 +22,15 @@ import { Link } from 'react-router-dom';
 
 import "./home.css"
 
-
-
+/**
+* Set Theme styling
+*/
 const styles = (theme) => ({
     headingCard: {
         color: theme.palette.primary.light,
-        // "font-size": "1rem"
     },
     formControl: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
         minWidth: 240,
         maxWidth: 240,
     }
@@ -40,7 +39,9 @@ const styles = (theme) => ({
 
 const Home = (props) => {
     const { classes } = props;
-
+    /**
+     * state variables
+     */
     const [upcomingMovies, setUpcomingMovies] = useState([]);
     const [releasedMovies, setReleasedMovies] = useState([]);
     const [searchValue, setSearchValue] = useState("");
@@ -51,6 +52,9 @@ const Home = (props) => {
     const [selectedDateStart, setSelectedDateStart] = React.useState("");
     const [selectedDateEnd, setSelectedDateEnd] = React.useState("");
 
+    /**
+     * fetch Upcoming movies and set it to state variable
+     */
     async function fetchUpcomingMovies() {
         let response = await fetch(props.baseUrl + "movies/?&status=PUBLISHED", {
             method: "GET",
@@ -62,6 +66,9 @@ const Home = (props) => {
         response = await response.json();
         setUpcomingMovies(response.movies);
     }
+    /**
+     * fetch Released movies and set it to state variable
+     */
     async function fetchReleasedMovies(filters = "") {
         let apiUrl = `${props.baseUrl}movies/?status=RELEASED`
         if (filters) {
@@ -78,6 +85,9 @@ const Home = (props) => {
         setReleasedMovies(response.movies);
     }
 
+    /**
+     * fetch Genre  and set it to state variable
+     */
     async function fetchGenre() {
         let response = await fetch(props.baseUrl + "genres", {
             method: "GET",
@@ -90,6 +100,9 @@ const Home = (props) => {
         setGenres(response.genres);
     }
 
+    /**
+     * fetch Artists  and set it to state variable
+     */
     async function fetchArtists() {
         let response = await fetch(props.baseUrl + "artists", {
             method: "GET",
@@ -102,6 +115,13 @@ const Home = (props) => {
         setArtists(response.artists);
     }
 
+    /**
+     * on page load fetch
+     * Upcoming movies
+     * Released MOvies
+     * Artists
+     * Genre
+     */
     useEffect(() => {
         fetchUpcomingMovies();
         fetchReleasedMovies();
@@ -109,13 +129,21 @@ const Home = (props) => {
         fetchGenre()
     }, [])
 
+    /**
+    * this function is used to change genres multi select
+    */
     const handleChange = (event) => {
         setGenresSelected(event.target.value);
     };
+    /**
+     * this function is used to change artists multi select
+     */
     const handleChangeArtists = (event) => {
         setArtistsSelected(event.target.value);
     };
-
+    /**
+     * this function is used to apply all the filters
+     */
     const applyFilters = async () => {
         let queryString = "";
         if (searchValue !== "") {
@@ -135,12 +163,6 @@ const Home = (props) => {
         }
         await fetchReleasedMovies(queryString);
     }
-
-    // const handleRelasedMovieClick = (id) => {
-    //     return (
-        
-    //     )
-    // }
 
     return (<div>
         <Header {...props}></Header>
@@ -185,7 +207,7 @@ const Home = (props) => {
                 </GridList>
             </div>
             <div className="filter">
-                <Card>
+                <Card style={{ margin: '16px' }}>
                     <CardContent>
                         <FormControl className={classes.formControl}>
                             <Typography className={classes.headingCard} color="textSecondary">

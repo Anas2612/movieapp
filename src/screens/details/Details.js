@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import Header from "../../common/header/Header";
 import Typography from '@material-ui/core/Typography'
 import YouTube from 'react-youtube';
@@ -10,13 +11,18 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import { Link, withRouter } from 'react-router-dom';
 
 import "./details.css";
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
+
 
 const Details = (props) => {
-
+    /**
+     * set state variables
+     */
     const [movieDetails, setMovieDetails] = useState("");
-
     const [stars, setStars] = useState([])
-
+    /**
+     * set youtube video options
+     */
     const youTubeOption = {
         height: '300',
         width: '700',
@@ -24,6 +30,9 @@ const Details = (props) => {
             autoplay: 1
         }
     }
+    /**
+     * this function is used to fetch a movie by id
+     */
     async function fetchMovieById() {
         let response = await fetch(props.baseUrl + `movies/${props.match.params.id}`, {
             method: "GET",
@@ -43,10 +52,11 @@ const Details = (props) => {
         setStars(initialRatings);
         setMovieDetails(response);
     }
-
+    /**
+     * this function is used to fhandle user interaction with ratings
+     */
     const handleRating = (id) => {
         const changedRatings = stars.map((star, i) => {
-            console.log(star)
             if (i < id) {
                 star.color = 'yellow';
             }else{
@@ -56,7 +66,9 @@ const Details = (props) => {
         })
         setStars(changedRatings);
     }
-
+    /**
+     * fetch movie details on page load based on id in params
+     */
     useEffect(() => {
         fetchMovieById()
     }, []);
@@ -66,7 +78,7 @@ const Details = (props) => {
     return (
         <div>
             <Header showBookShowButton={true} id={props.match.params.id} {...props}></Header>
-            <Typography>
+            <Typography component={'span'}>
                 <Link to="/" className="link" ><div className="back-button">{'< Back to Home'}</div></Link>
             </Typography>
             <div className="flex-container">
@@ -106,6 +118,7 @@ const Details = (props) => {
                         {
                             stars.map(star => {
                                 return <StarBorderIcon
+                                    key={star.id}
                                     className={star.color}
                                     onClick={() => handleRating(star.id)}
                                 ></StarBorderIcon>
