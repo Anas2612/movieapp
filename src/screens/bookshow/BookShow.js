@@ -11,7 +11,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 
 const BookShow = (props) => {
@@ -36,7 +36,6 @@ const BookShow = (props) => {
 
   useEffect(() => {
     let dataShows = null;
-
     fetch(props.baseUrl + "movies/" + props.match.params.id + "/shows", {
       method: "GET",
       headers: {
@@ -305,4 +304,4 @@ const BookShow = (props) => {
   );
 };
 
-export default BookShow;
+export default withRouter(BookShow);
